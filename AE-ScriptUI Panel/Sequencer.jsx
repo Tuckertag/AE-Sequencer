@@ -123,9 +123,10 @@ alignButton.onClick = function() {
                 
             for (var i = 0; i < selectedLayers.length; i++) {
                 var layer = selectedLayers[i];
+                var trimming = layer.inPoint - layer.startTime;
 // Change Function
 //============
-                layer.inPoint = inPoint;
+                layer.startTime = inPoint - trimming;
             }
 
             app.endUndoGroup();
@@ -170,13 +171,16 @@ sequencerButton.onClick = function() {
                 }else{
                     var inPoint = comp.displayStartTime;
                 }
-                selectedLayers[0].inPoint = inPoint; 
+            
+                layerV = selectedLayers[0];
+                layerV.startTime = inPoint + (layerV.startTime - layerV.inPoint); 
                 
                 for (var i = 1; i < selectedLayers.length; i++) {
                     var previousLayer = selectedLayers[i - 1];
                     var currentLayer = selectedLayers[i];
+                    trimming = currentLayer.startTime - currentLayer.inPoint;
 
-                    currentLayer.inPoint = previousLayer.outPoint;
+                    currentLayer.startTime = previousLayer.outPoint + trimming;
                 }
 
                 app.endUndoGroup();
@@ -232,10 +236,11 @@ sequenceRandom.onClick = function () {
                 
             for (var i = 0; i < selectedLayers.length; i++) {
                 var layer = selectedLayers[i];
+                var trimming = layer.startTime - layer.inPoint;
 // Change Function
 //============
                 var randomTime = inPoint + Math.random(0,1) * (outPoint);
-                layer.inPoint = randomTime;
+                layer.startTime = randomTime + trimming;
             }
 
             app.endUndoGroup();
@@ -298,11 +303,12 @@ sequenceEqual.onClick = function () {
                 
             for (var i = 0; i < selectedLayers.length; i++) {
                 var layer = selectedLayers[i];
+                var trimming = layer.startTime - layer.inPoint;
 // Change Function
 //============
                 var equalTime = (outPoint/(selectedLayers.length-1))*(i);
                 var equalFrames = equalTime/frameRate;
-                layer.inPoint = inPoint + equalFrames;
+                layer.startTime = inPoint + equalFrames + trimming;
             }
 
             app.endUndoGroup();
@@ -321,7 +327,5 @@ sequenceEqual.onClick = function () {
             alignButton.enabled = true;
             sequencerButton.enabled = true;
    }
-
-
 
 showWindow(SequenceLayers)
