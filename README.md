@@ -1,6 +1,5 @@
 # AE-Sequencer
 Hi there!
-Thank you for downloading my ScriptUI tool!
 Sequencer is an After Effects script that lets users seamlessy distribute the layers on their timeline.
 
 --How to Install--
